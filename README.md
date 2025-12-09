@@ -2,11 +2,6 @@
 
 > Sistema web integral para la gestión de pedidos personalizados y control de inventario, desarrollado con Django.
 
-![Status](https://img.shields.io/badge/Estado-En_Desarrollo-yellow)
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![Django](https://img.shields.io/badge/Django-5.0-green.svg)
-![Style](https://img.shields.io/badge/Style-Cute%20Pastel-pink)
-
 ## 📖 Descripción del Proyecto
 
 **Tienda Detalles Originales** es una solución web diseñada para optimizar el flujo de trabajo de una tienda de artículos personalizados (poleras, tazones, impresiones 3D). 
@@ -29,7 +24,7 @@ Este proyecto fue desarrollado como parte de la evaluación de la asignatura [No
 * **Validaciones:** Reglas de negocio (ej. no finalizar pedidos sin pago completo).
 
 ## 🎨 Galería de Vistas
-*(Aquí puedes subir tus capturas de pantalla a la carpeta /screenshots y enlazarlas)*
+*(Aquí subir capturas de pantalla a la carpeta /screenshots y enlazarlas)*
 
 | Catálogo Público | Seguimiento de Pedido |
 |:---:|:---:|
