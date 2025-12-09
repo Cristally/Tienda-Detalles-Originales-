@@ -4,11 +4,11 @@
 
 ## 📖 Descripción del Proyecto
 
-**Tienda Detalles Originales** es una solución web diseñada para optimizar el flujo de trabajo de una tienda de artículos personalizados (poleras, tazones, impresiones 3D). 
+La **Tienda Detalles Originales**, es una solución web diseñada para optimizar el flujo de trabajo de una tienda de artículos personalizados (poleras, tazones, impresiones 3D). 
 
 El sistema resuelve la problemática de la dispersión de pedidos (que llegan por WhatsApp, Instagram, presencial, etc.) centralizando todo en un único panel de administración, permitiendo además a los clientes solicitar productos vía web y realizar un seguimiento en tiempo real.
 
-Este proyecto fue desarrollado como parte de la evaluación de la asignatura [Nombre de tu Asignatura] en un plazo de 2 semanas.
+Este proyecto fue desarrollado como parte de la evaluación de la asignatura 'back-end' en un plazo de 2 semanas.
 
 ## ✨ Características Principales
 
