@@ -45,3 +45,7 @@ Sigue estos pasos para correr el proyecto localmente:
    ```bash
    git clone [https://github.com/tu-usuario/tienda-detalles-originales.git](https://github.com/tu-usuario/tienda-detalles-originales.git)
    cd tienda-detalles-originales
+   cd PRUEBA_3_HUERTA_DE_LA_CRUZ
+   python manage.py makemigrations
+   python manage.py migrate
+   python manage.py runserver
