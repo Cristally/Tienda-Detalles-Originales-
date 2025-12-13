@@ -3,6 +3,9 @@ from .models import Producto, Pedido
 from .forms import SolicitudPedidoForm
 from django.contrib import messages
 
+def Base(request):
+    return render(request, "base.html")
+
 def catalogo(request):
     productos = Producto.objects.all()
     return render(request, 'catalogo.html', {'productos': productos})
