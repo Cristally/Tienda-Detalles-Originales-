@@ -60,7 +60,7 @@ class Pedido(models.Model):
 
     # Datos del Cliente
     cliente_nombre = models.CharField(max_length=200)
-    contacto = models.CharField(max_length=200, help_text="Email, Teléfono o Usuario RRSS")
+    contacto = models.CharField(max_length=200)
     
     # Datos del Pedido
     producto_referencia = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True)

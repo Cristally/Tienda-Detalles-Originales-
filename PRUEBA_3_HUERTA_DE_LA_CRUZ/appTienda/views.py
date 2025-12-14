@@ -10,7 +10,11 @@ def catalogo(request):
     productos = Producto.objects.all()
     return render(request, 'index.html', {'productos': productos})
 
-def crear_pedido(request):
+def detalle(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    return render(request, 'detalles.html', {'producto': producto})
+
+def pedido(request):
     token_generado = None
     if request.method == 'POST':
         form = SolicitudPedidoForm(request.POST, request.FILES)
@@ -22,7 +26,7 @@ def crear_pedido(request):
     else:
         form = SolicitudPedidoForm()
 
-    return render(request, 'crear_pedido.html', {'form': form, 'token': token_generado})
+    return render(request, 'pedido.html', {'form': form, 'token': token_generado})
 
 def seguimiento(request):
     pedido = None

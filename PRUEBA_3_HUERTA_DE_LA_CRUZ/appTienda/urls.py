@@ -5,7 +5,9 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('', views.catalogo )
+    path('', views.catalogo ),
+    path('detalles/<int:id>', views.detalle, name="detalle"),
+    path('pedido/', views.pedido)
 ]
 
 if settings.DEBUG:

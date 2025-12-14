@@ -22,7 +22,7 @@
                     <h5 class="card-title">{{ producto.nombre }}</h5>
                     <p class="card-text">$ {{ producto.precio_base }}</p>
                     <p class="card-text">categoria {{ producto.categoria }}</p>
-                    <a href="#" class="btn btn-primary">Ver detalles</a>
+                    <a href="{% url 'detalle' producto.id %}" class="btn btn-primary">Ver detalles</a>
                 </div>
             </div>
             {% endfor %}
