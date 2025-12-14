@@ -20,10 +20,17 @@
 
     <body>
         <header>
-            <!-- place navbar here -->
+            <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand">Navbar</a>
+                    <a href='admin' class="btn btn-primary">Login</a>
+                </div>
+            </nav>
         </header>
         <main>
-            holiii
+            
+            {% block content %}
+            {% endblock content %}
         </main>
         <footer>
             <!-- place footer here -->

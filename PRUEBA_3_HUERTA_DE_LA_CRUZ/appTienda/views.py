@@ -8,7 +8,7 @@ def Base(request):
 
 def catalogo(request):
     productos = Producto.objects.all()
-    return render(request, 'catalogo.html', {'productos': productos})
+    return render(request, 'index.html', {'productos': productos})
 
 def crear_pedido(request):
     token_generado = None
