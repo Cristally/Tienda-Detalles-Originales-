@@ -19,6 +19,26 @@ import random
 def catalogo(request):
     productos = Producto.objects.all()  #Toma todos los productos
     categorias = Categoria.objects.all() #Toma todas las categorias
+
+    # 2. Filtro por Barra de Búsqueda (input name="q")
+    query = request.GET.get('q') # Capturamos lo que escribieron
+    if query:
+        # Filtramos si el nombre CONTIENE el texto (icontains ignora mayúsculas/minúsculas)
+        # Opcional: También busca en la descripción usando Q 
+        productos = productos.filter(
+            Q(nombre_producto__icontains=query) | 
+            Q(descripcion_producto__icontains=query)
+        )
+    # 3. Filtro por Categoría (botón ?categoria=ID)
+    categoria_id = request.GET.get('categoria')
+    if categoria_id:
+        productos = productos.filter(categoria_producto_id=categoria_id)
+    # 4. Filtro por Destacados (botón ?destacado=1)
+    destacado = request.GET.get('destacado')
+    if destacado == '1':
+        productos = productos.filter(producto_destacado=True)
+
+    # --- Fin Lógica ---
     return render(request, 'catalogo.html', {
         'productos': productos,
         'categoria': categorias
@@ -96,15 +116,12 @@ def seguimiento(request):
 
 
 
-
 #Para los insumos
 @user_passes_test(lambda u: u.is_staff, login_url='/admin/login/')  #Requiere que el usuario ingrese como admin
 #Al no estar ingresado, redirigira al usuario a admin/login/, del propio django
 def lista_insumos(request):
     insumos = Insumo.objects.all()
     return render(request, 'insumos.html', {'insumos': insumos})
-
-
 
 
 
@@ -161,9 +178,9 @@ def generar_pdf_token(request, token):
             [
                 pedido.producto.nombre_producto,
                 pedido.producto.categoria_producto.nombre_categoria,
-                 f"${random.randint(5990, 49990) + pedido.producto.precio_base_producto}", 
-                 #Para no poseer confusiones con el precio del producto en si, 
-                 #se toma el valor del producto y se suma por un número aleatorio, para simular valores
+                f"${random.randint(5990, 49990) + pedido.producto.precio_base_producto}", 
+                #Para no poseer confusiones con el precio del producto en si, 
+                #se toma el valor del producto y se suma por un número aleatorio, para simular valores
 
                 pedido.producto.descripcion_producto
             ]
@@ -183,7 +200,6 @@ def generar_pdf_token(request, token):
 
 
 
-
     if pedido.descripcion:
         elements.append(Paragraph("Descripción del Pedido:", styles['Heading3']))
         elements.append(Paragraph(pedido.descripcion, styles['Normal']))
@@ -195,7 +211,6 @@ def generar_pdf_token(request, token):
     response = HttpResponse(buffer, content_type='application/pdf') #Para que el navegador muestre la información como archivo pdf y no como página web
     response['Content-Disposition'] = f'inline; filename="Boleta_Pedido_{pedido.id}_{fecha_actual}.pdf"' #Nombre que recibe el archivo
     return response
-
 
 
 
