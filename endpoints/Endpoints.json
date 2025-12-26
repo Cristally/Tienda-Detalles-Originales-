@@ -1,0 +1,1902 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "API Tienda",
+        "version": "1.0.0",
+        "description": "Documentación de la API"
+    },
+    "paths": {
+        "/api/categorias/": {
+            "get": {
+                "operationId": "categorias_list",
+                "tags": [
+                    "categorias"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Categoria"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/categorias/{id}/": {
+            "put": {
+                "operationId": "categorias_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "categorias"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "categorias_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "categorias"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCategoria"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCategoria"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedCategoria"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/categorias/{id}/delete/": {
+            "delete": {
+                "operationId": "categorias_delete_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "categorias"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/categorias/crear/": {
+            "get": {
+                "operationId": "categorias_crear_list",
+                "tags": [
+                    "categorias"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Categoria"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "categorias_crear_create",
+                "tags": [
+                    "categorias"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Categoria"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Categoria"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/insumos/": {
+            "get": {
+                "operationId": "insumos_list",
+                "tags": [
+                    "insumos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Insumo"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/insumos/{id}/": {
+            "get": {
+                "operationId": "insumos_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "insumos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Insumo"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "insumos_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "insumos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Insumo"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "insumos_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "insumos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedInsumo"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedInsumo"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedInsumo"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Insumo"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/insumos/{id}/delete/": {
+            "delete": {
+                "operationId": "insumos_delete_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "insumos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/insumos/crear/": {
+            "get": {
+                "operationId": "insumos_crear_list",
+                "tags": [
+                    "insumos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Insumo"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "insumos_crear_create",
+                "tags": [
+                    "insumos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Insumo"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Insumo"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/insumos/filtrar/{nombre}/": {
+            "get": {
+                "operationId": "insumos_filtrar_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "nombre",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "insumos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Insumo"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/pedidos/{id}/": {
+            "put": {
+                "operationId": "pedidos_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "pedidos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "pedidos_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "pedidos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedPedido"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedPedido"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedPedido"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/pedidos/crear/": {
+            "post": {
+                "operationId": "pedidos_crear_create",
+                "tags": [
+                    "pedidos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Pedido"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/pedidos/filtrar/{token}/": {
+            "get": {
+                "operationId": "pedidos_filtrar_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "token",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "pedidos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pedido"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/pedidos/filtrar/estado/{estado_pedido}/": {
+            "get": {
+                "operationId": "pedidos_filtrar_estado_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "estado_pedido",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "pedidos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/pedidos/filtrar/estado_pago/{estado_pago}/": {
+            "get": {
+                "operationId": "pedidos_filtrar_estado_pago_list",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "estado_pago",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "pedidos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Pedido"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/pedidos/filtrar/por-fecha/": {
+            "get": {
+                "operationId": "pedidos_filtrar_por_fecha_list",
+                "tags": [
+                    "pedidos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Pedido"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/productos/": {
+            "get": {
+                "operationId": "productos_list",
+                "tags": [
+                    "productos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Producto"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "productos_create",
+                "tags": [
+                    "productos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/productos/{id}/": {
+            "put": {
+                "operationId": "productos_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "productos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "productos_partial_update",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "productos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedProducto"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedProducto"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchedProducto"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/productos/{id}/delete/": {
+            "delete": {
+                "operationId": "productos_delete_destroy",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "productos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/productos/crear/": {
+            "get": {
+                "operationId": "productos_crear_list",
+                "tags": [
+                    "productos"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Producto"
+                                    }
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "productos_crear_create",
+                "tags": [
+                    "productos"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Producto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Producto"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/reporte_reporte": {
+            "get": {
+                "operationId": "reporte_reporte_retrieve",
+                "tags": [
+                    "reporte_reporte"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No response body"
+                    }
+                }
+            }
+        },
+        "/api/schema/": {
+            "get": {
+                "operationId": "schema_retrieve",
+                "description": "OpenApi3 schema for this API. Format can be selected via content negotiation.\n\n- YAML: application/vnd.oai.openapi\n- JSON: application/vnd.oai.openapi+json",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "format",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "json",
+                                "yaml"
+                            ]
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "lang",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "af",
+                                "ar",
+                                "ar-dz",
+                                "ast",
+                                "az",
+                                "be",
+                                "bg",
+                                "bn",
+                                "br",
+                                "bs",
+                                "ca",
+                                "ckb",
+                                "cs",
+                                "cy",
+                                "da",
+                                "de",
+                                "dsb",
+                                "el",
+                                "en",
+                                "en-au",
+                                "en-gb",
+                                "eo",
+                                "es",
+                                "es-ar",
+                                "es-co",
+                                "es-mx",
+                                "es-ni",
+                                "es-ve",
+                                "et",
+                                "eu",
+                                "fa",
+                                "fi",
+                                "fr",
+                                "fy",
+                                "ga",
+                                "gd",
+                                "gl",
+                                "he",
+                                "hi",
+                                "hr",
+                                "hsb",
+                                "hu",
+                                "hy",
+                                "ia",
+                                "id",
+                                "ig",
+                                "io",
+                                "is",
+                                "it",
+                                "ja",
+                                "ka",
+                                "kab",
+                                "kk",
+                                "km",
+                                "kn",
+                                "ko",
+                                "ky",
+                                "lb",
+                                "lt",
+                                "lv",
+                                "mk",
+                                "ml",
+                                "mn",
+                                "mr",
+                                "ms",
+                                "my",
+                                "nb",
+                                "ne",
+                                "nl",
+                                "nn",
+                                "os",
+                                "pa",
+                                "pl",
+                                "pt",
+                                "pt-br",
+                                "ro",
+                                "ru",
+                                "sk",
+                                "sl",
+                                "sq",
+                                "sr",
+                                "sr-latn",
+                                "sv",
+                                "sw",
+                                "ta",
+                                "te",
+                                "tg",
+                                "th",
+                                "tk",
+                                "tr",
+                                "tt",
+                                "udm",
+                                "ug",
+                                "uk",
+                                "ur",
+                                "uz",
+                                "vi",
+                                "zh-hans",
+                                "zh-hant"
+                            ]
+                        }
+                    }
+                ],
+                "tags": [
+                    "schema"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/vnd.oai.openapi": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/yaml": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/vnd.oai.openapi+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Categoria": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_categoria": {
+                        "type": "string",
+                        "title": "Nombre de la Categoría",
+                        "maxLength": 100
+                    },
+                    "descripcion_categoria": {
+                        "type": "string"
+                    },
+                    "productos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Producto"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "nombre_categoria",
+                    "productos"
+                ]
+            },
+            "EstadoPagoEnum": {
+                "enum": [
+                    "PEN",
+                    "PAR",
+                    "PAG",
+                    "REM"
+                ],
+                "type": "string",
+                "description": "* `PEN` - Pendiente\n* `PAR` - Parcial\n* `PAG` - Pagado\n* `REM` - Reembolsado"
+            },
+            "EstadoPedidoEnum": {
+                "enum": [
+                    "SOL",
+                    "APR",
+                    "EPR",
+                    "REA",
+                    "ENT",
+                    "FIN",
+                    "CAN"
+                ],
+                "type": "string",
+                "description": "* `SOL` - Solicitado\n* `APR` - Aprobado\n* `EPR` - En proceso\n* `REA` - Realizado\n* `ENT` - Entregado\n* `FIN` - Finalizado\n* `CAN` - Cancelado"
+            },
+            "ImagenPedido": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "imagen": {
+                        "type": "string",
+                        "format": "uri",
+                        "title": "Imagenes de Referencia"
+                    },
+                    "orden": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "id",
+                    "imagen"
+                ]
+            },
+            "ImagenProducto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "imagen": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "orden": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "id",
+                    "imagen"
+                ]
+            },
+            "Insumo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_insumo": {
+                        "type": "string",
+                        "title": "Nombre del Insumo",
+                        "maxLength": 100
+                    },
+                    "tipo_insumo": {
+                        "type": "string",
+                        "title": "Tipo de Insumo",
+                        "maxLength": 100
+                    },
+                    "cantidad_disponible_insumo": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Cantidad Disponible del Insumo"
+                    },
+                    "marca_insumo": {
+                        "type": "string",
+                        "title": "Marca del Insumo",
+                        "maxLength": 50
+                    },
+                    "color_insumo": {
+                        "type": "string",
+                        "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+                        "maxLength": 25
+                    }
+                },
+                "required": [
+                    "cantidad_disponible_insumo",
+                    "id",
+                    "marca_insumo",
+                    "nombre_insumo",
+                    "tipo_insumo"
+                ]
+            },
+            "OrigenPedidoEnum": {
+                "enum": [
+                    "FAC",
+                    "IG",
+                    "WHA",
+                    "PRE",
+                    "WEB",
+                    "OTR"
+                ],
+                "type": "string",
+                "description": "* `FAC` - Facebook\n* `IG` - Instagram\n* `WHA` - WhatsApp\n* `PRE` - Presencial\n* `WEB` - Sitio Web\n* `OTR` - Otro"
+            },
+            "PatchedCategoria": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_categoria": {
+                        "type": "string",
+                        "title": "Nombre de la Categoría",
+                        "maxLength": 100
+                    },
+                    "descripcion_categoria": {
+                        "type": "string"
+                    },
+                    "productos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Producto"
+                        },
+                        "readOnly": true
+                    }
+                }
+            },
+            "PatchedInsumo": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_insumo": {
+                        "type": "string",
+                        "title": "Nombre del Insumo",
+                        "maxLength": 100
+                    },
+                    "tipo_insumo": {
+                        "type": "string",
+                        "title": "Tipo de Insumo",
+                        "maxLength": 100
+                    },
+                    "cantidad_disponible_insumo": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Cantidad Disponible del Insumo"
+                    },
+                    "marca_insumo": {
+                        "type": "string",
+                        "title": "Marca del Insumo",
+                        "maxLength": 50
+                    },
+                    "color_insumo": {
+                        "type": "string",
+                        "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+                        "maxLength": 25
+                    }
+                }
+            },
+            "PatchedPedido": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "cliente_nombre": {
+                        "type": "string",
+                        "title": "Nombre del cliente",
+                        "maxLength": 100
+                    },
+                    "cliente_contacto": {
+                        "type": "string",
+                        "title": "Contacto del cliente",
+                        "maxLength": 100
+                    },
+                    "producto": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "producto_nombre": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "descripcion": {
+                        "type": "string",
+                        "title": "Descripción"
+                    },
+                    "fecha_solicitada": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true,
+                        "title": "Fecha Solicitada del Pedido"
+                    },
+                    "origen_pedido": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/OrigenPedidoEnum"
+                            }
+                        ],
+                        "title": "Origen del Pedido"
+                    },
+                    "origen_otro": {
+                        "type": "string",
+                        "title": "Origen (Otro)",
+                        "maxLength": 100
+                    },
+                    "estado_pedido": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EstadoPedidoEnum"
+                            }
+                        ],
+                        "title": "Estado del Pedido"
+                    },
+                    "estado_pago": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EstadoPagoEnum"
+                            }
+                        ],
+                        "title": "Estado del Pago"
+                    },
+                    "token_seguimiento": {
+                        "type": "string",
+                        "format": "uuid",
+                        "readOnly": true,
+                        "title": "Token de Seguimiento"
+                    },
+                    "fecha_creacion": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "title": "Fecha de Creación del Pedido"
+                    },
+                    "producto_referencia": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true,
+                        "title": "Imagen de referencia"
+                    },
+                    "imagenes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImagenPedido"
+                        },
+                        "readOnly": true
+                    }
+                }
+            },
+            "PatchedProducto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_producto": {
+                        "type": "string",
+                        "title": "Nombre del Producto",
+                        "maxLength": 100
+                    },
+                    "descripcion_producto": {
+                        "type": "string",
+                        "title": "Descripción del producto"
+                    },
+                    "categoria_producto": {
+                        "type": "integer",
+                        "title": "Categoria del producto"
+                    },
+                    "categoria_nombre": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "precio_base_producto": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Precio del Producto"
+                    },
+                    "producto_destacado": {
+                        "type": "boolean",
+                        "title": "Producto Destacado Sí/No"
+                    },
+                    "imagenes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImagenProducto"
+                        },
+                        "readOnly": true
+                    }
+                }
+            },
+            "Pedido": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "cliente_nombre": {
+                        "type": "string",
+                        "title": "Nombre del cliente",
+                        "maxLength": 100
+                    },
+                    "cliente_contacto": {
+                        "type": "string",
+                        "title": "Contacto del cliente",
+                        "maxLength": 100
+                    },
+                    "producto": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "producto_nombre": {
+                        "type": "string",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "descripcion": {
+                        "type": "string",
+                        "title": "Descripción"
+                    },
+                    "fecha_solicitada": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true,
+                        "title": "Fecha Solicitada del Pedido"
+                    },
+                    "origen_pedido": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/OrigenPedidoEnum"
+                            }
+                        ],
+                        "title": "Origen del Pedido"
+                    },
+                    "origen_otro": {
+                        "type": "string",
+                        "title": "Origen (Otro)",
+                        "maxLength": 100
+                    },
+                    "estado_pedido": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EstadoPedidoEnum"
+                            }
+                        ],
+                        "title": "Estado del Pedido"
+                    },
+                    "estado_pago": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EstadoPagoEnum"
+                            }
+                        ],
+                        "title": "Estado del Pago"
+                    },
+                    "token_seguimiento": {
+                        "type": "string",
+                        "format": "uuid",
+                        "readOnly": true,
+                        "title": "Token de Seguimiento"
+                    },
+                    "fecha_creacion": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "title": "Fecha de Creación del Pedido"
+                    },
+                    "producto_referencia": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true,
+                        "title": "Imagen de referencia"
+                    },
+                    "imagenes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImagenPedido"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "cliente_contacto",
+                    "cliente_nombre",
+                    "descripcion",
+                    "fecha_creacion",
+                    "id",
+                    "imagenes",
+                    "origen_pedido",
+                    "producto_nombre",
+                    "token_seguimiento"
+                ]
+            },
+            "Producto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
+                    "nombre_producto": {
+                        "type": "string",
+                        "title": "Nombre del Producto",
+                        "maxLength": 100
+                    },
+                    "descripcion_producto": {
+                        "type": "string",
+                        "title": "Descripción del producto"
+                    },
+                    "categoria_producto": {
+                        "type": "integer",
+                        "title": "Categoria del producto"
+                    },
+                    "categoria_nombre": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "precio_base_producto": {
+                        "type": "integer",
+                        "maximum": 9223372036854775807,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Precio del Producto"
+                    },
+                    "producto_destacado": {
+                        "type": "boolean",
+                        "title": "Producto Destacado Sí/No"
+                    },
+                    "imagenes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ImagenProducto"
+                        },
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "categoria_nombre",
+                    "categoria_producto",
+                    "descripcion_producto",
+                    "id",
+                    "imagenes",
+                    "nombre_producto",
+                    "precio_base_producto"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sessionid"
+            }
+        }
+    }
+}
