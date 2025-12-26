@@ -230,5 +230,5 @@ Es posible descargar el archivo en [formato .yaml](endpoints/Endpoints.yaml) o e
 ---
 
 
-*Desarrollado por Cristally & Miriah Huerta*
+*Desarrollado por Stephany de la Cruz & Miriah Huerta*
 
