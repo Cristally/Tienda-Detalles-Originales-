@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+	<h4>Buscar Pedidos</h4>
+
+	<div class="d-flex align-items-center my-3">
+		<div class="dropdown me-3">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="buscarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+				Seleccionar búsqueda
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="buscarDropdown">
+				<li><a class="dropdown-item" href="#" data-filter="token">Búsqueda por token</a></li>
+				<li><a class="dropdown-item" href="#" data-filter="estado_pedido">Búsqueda por estado del pedido</a></li>
+				<li><a class="dropdown-item" href="#" data-filter="rango_fechas">Búsqueda por rango de fechas</a></li>
+				<li><a class="dropdown-item" href="#" data-filter="estado_pago">Búsqueda por estado de pago</a></li>
+			</ul>
+		</div>
+
+		<div class="me-3">
+			<label class="form-label mb-0">Máx resultados</label>
+			<input id="maxResults" type="number" class="form-control" style="max-width:120px;" value="50" min="1">
+		</div>
+
+		<div>
+			<button id="btnSearch" class="btn btn-primary">Buscar</button>
+		</div>
+	</div>
+
+	<div id="search-controls" class="mb-3"></div>
+
+	<div id="search-result"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+	const controls = document.getElementById('search-controls');
+	const result = document.getElementById('search-result');
+	const maxInput = document.getElementById('maxResults');
+	let currentFilter = null;
+
+	function clearControls(){ controls.innerHTML = ''; result.innerHTML = ''; }
+
+	function renderTable(rows){
+		if(!rows || rows.length===0){ result.innerHTML = '<div class="alert alert-info">No se encontraron pedidos.</div>'; return; }
+		let html = '<table class="table table-sm table-bordered"><thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Estado Pedido</th><th>Estado Pago</th><th>Origen</th><th>Token</th></tr></thead><tbody>';
+		rows.forEach(p=>{
+			html += `<tr><td>${p.id||''}</td><td>${p.cliente_nombre||''}</td><td>${p.fecha_solicitada||''}</td><td>${p.estado_pedido||''}</td><td>${p.estado_pago||''}</td><td>${p.origen_pedido||p.origen_otro||''}</td><td>${p.token_seguimiento||''}</td></tr>`;
+		});
+		html += '</tbody></table>';
+		result.innerHTML = html;
+	}
+
+	// wire dropdown
+	document.querySelectorAll('.dropdown-item').forEach(a=>{
+		a.addEventListener('click', (e)=>{
+			e.preventDefault();
+			const f = a.getAttribute('data-filter');
+			currentFilter = f;
+			clearControls();
+			if(f === 'token'){
+				const input = document.createElement('input'); input.className='form-control'; input.placeholder='Ingresar token (uuid)'; input.id='q_token';
+				controls.appendChild(input);
+			}else if(f === 'estado_pedido'){
+				const sel = document.createElement('select'); sel.className='form-select'; sel.id='q_estado';
+				[['SOL','Solicitado'],['APR','Aprobado'],['EPR','En proceso'],['REA','Realizado'],['ENT','Entregado'],['FIN','Finalizado'],['CAN','Cancelado']].forEach(o=>{
+					const opt = document.createElement('option'); opt.value=o[0]; opt.textContent=o[1]; sel.appendChild(opt);
+				});
+				controls.appendChild(sel);
+			}else if(f === 'estado_pago'){
+				const sel = document.createElement('select'); sel.className='form-select'; sel.id='q_estado_pago';
+				[['PEN','Pendiente'],['PAR','Parcial'],['PAG','Pagado'],['REM','Reembolsado']].forEach(o=>{
+					const opt = document.createElement('option'); opt.value=o[0]; opt.textContent=o[1]; sel.appendChild(opt);
+				});
+				controls.appendChild(sel);
+			}else if(f === 'rango_fechas'){
+				const d = document.createElement('input'); d.type='date'; d.className='form-control'; d.id='q_desde'; d.style.maxWidth='220px';
+				const h = document.createElement('input'); h.type='date'; h.className='form-control mt-2'; h.id='q_hasta'; h.style.maxWidth='220px';
+				controls.appendChild(d); controls.appendChild(h);
+			}
+		});
+	});
+
+	document.getElementById('btnSearch').addEventListener('click', async ()=>{
+		result.innerHTML = '';
+		if(!currentFilter){ alert('Selecciona tipo de búsqueda.'); return; }
+		const limit = Math.max(1, parseInt(maxInput.value)||50);
+
+		try{
+			if(currentFilter === 'token'){
+				const token = document.getElementById('q_token')?.value?.trim();
+				if(!token){ alert('Ingresa un token.'); return; }
+				const r = await fetch(`/api/pedidos/filtrar/${encodeURIComponent(token)}/`);
+				if(!r.ok){ result.innerHTML = `<div class="alert alert-danger">Error ${r.status}</div>`; return; }
+				const obj = await r.json();
+				renderTable([obj]);
+				return;
+			}
+
+			if(currentFilter === 'estado_pedido'){
+				const estado = document.getElementById('q_estado').value;
+				const r = await fetch(`/api/pedidos/filtrar/estado/${encodeURIComponent(estado)}/?limit=${limit}`);
+				if(!r.ok){ result.innerHTML = `<div class="alert alert-danger">Error ${r.status}</div>`; return; }
+				const data = await r.json();
+				renderTable(Array.isArray(data)?data:[]);
+				return;
+			}
+
+			if(currentFilter === 'estado_pago'){
+				const estado = document.getElementById('q_estado_pago').value;
+				const r = await fetch(`/api/pedidos/filtrar/estado_pago/${encodeURIComponent(estado)}/?limit=${limit}`);
+				if(!r.ok){ result.innerHTML = `<div class="alert alert-danger">Error ${r.status}</div>`; return; }
+				const data = await r.json();
+				renderTable(Array.isArray(data)?data:[]);
+				return;
+			}
+
+			if(currentFilter === 'rango_fechas'){
+				const d = document.getElementById('q_desde')?.value; const h = document.getElementById('q_hasta')?.value;
+				if(!d || !h){ alert('Selecciona ambas fechas.'); return; }
+				const r = await fetch(`/api/pedidos/filtrar/por-fecha/?desde=${encodeURIComponent(d)}&hasta=${encodeURIComponent(h)}&limit=${limit}`);
+				if(!r.ok){ result.innerHTML = `<div class="alert alert-danger">Error ${r.status}</div>`; return; }
+				const data = await r.json();
+				renderTable(Array.isArray(data)?data:[]);
+				return;
+			}
+
+		}catch(e){ console.error(e); result.innerHTML = `<div class="alert alert-danger">Error de red o respuesta inválida.</div>`; }
+	});
+});
+</script>
+
+{% endblock %}

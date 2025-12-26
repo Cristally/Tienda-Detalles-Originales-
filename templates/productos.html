@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    
+    <a href="{% url 'catalogo' %}" class="btn btn-outline-secondary rounded-pill mb-4">⬅ Volver al catálogo</a>
+
+    <div class="card card-product p-4 border-0 shadow-lg">
+        <div class="row g-5 align-items-center">
+            
+            <div class="col-md-6">
+                <div id="productCarousel" class="carousel slide rounded-4 overflow-hidden shadow-sm" data-bs-ride="carousel">
+                    
+                    <div class="carousel-inner" style="background-color: #f8f9fa;">
+                        {% for img_obj in producto.imagenes.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <img src="{{ img_obj.imagen.url }}" class="d-block w-100" style="height: 400px; object-fit: contain;" alt="Imagen {{ producto.nombre_producto }}">
+                            </div>
+                        {% empty %}
+                            <div class="carousel-item active">
+                                <div class="d-flex align-items-center justify-content-center text-muted" style="height: 400px;">
+                                    Sin Imagen 📷
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if producto.imagenes.count > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    {% endif %}
+                </div>
+                
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    {% for img_obj in producto.imagenes.all %}
+                        <img src="{{ img_obj.imagen.url }}" width="60" height="60" class="rounded border bg-light" style="object-fit: contain; cursor: pointer;">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <p class="text-uppercase text-muted fw-bold mb-2">
+                    {{ producto.categoria_producto.nombre_categoria }}
+                </p>
+                
+                <h1 class="display-5 fw-bold mb-3" style="color: var(--text-color);">
+                    {{ producto.nombre_producto }}
+                </h1>
+                
+                {% if producto.producto_destacado %}
+                    <span class="badge bg-warning text-dark mb-3">⭐ Producto Destacado</span>
+                {% endif %}
+                
+                <h2 class="display-6 fw-bold mb-4" style="color: var(--primary);">
+                    ${{ producto.precio_base_producto }}
+                </h2>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold">Descripción:</h5>
+                    <p class="text-muted" style="line-height: 1.8;">
+                        {{ producto.descripcion_producto }}
+                    </p>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-grid gap-2">
+                    <a href="{% url 'crear_pedido' %}?ref={{ producto.id }}" class="btn btn-cute btn-lg py-3 shadow-sm">
+                        ✨ ¡Lo quiero! Personalizar ahora ➜
+                    </a>
+                </div>
+                
+                <p class="text-center mt-3 small text-muted">
+                    <i class="bi bi-shield-lock"></i> Compra segura y personalizada
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

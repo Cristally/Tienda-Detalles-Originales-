@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="card shadow-lg" style="width: 100%; max-width: 450px;">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4">🔐 Iniciar Sesión</h2>
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {% for error in form.non_field_errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+
+            <form method="post" class="needs-validation">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">Usuario</label>
+                    <input type="text" 
+                           name="username" 
+                           class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
+                           placeholder="Nombre de usuario"
+                           required>
+                    {% if form.username.errors %}
+                        <div class="invalid-feedback">{{ form.username.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña</label>
+                    <input type="password" 
+                           name="password" 
+                           class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
+                           placeholder="Contraseña"
+                           required>
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback">{{ form.password.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">Ingresar</button>
+            </form>
+
+            <hr class="my-4">
+            
+            <p class="text-center text-muted small">
+                <small>Si no tienes una cuenta, contacta al administrador</small>
+            </p>
+            
+            <div class="text-center">
+                <a href="{% url 'catalogo' %}" class="text-decoration-none">← Volver al catálogo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

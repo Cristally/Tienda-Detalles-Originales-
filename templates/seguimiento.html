@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'styles/seguimiento.css' %}">
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        
+        <h2 class="text-center mb-5" style="color: var(--primary);">🔍 Estado de tu Pedido</h2>
+
+        <div class="card p-4 mb-5 border-0 shadow-sm text-center">
+            <form method="get" class="row justify-content-center g-2">
+                <div class="col-auto">
+                    <input type="text" name="token" class="form-control form-control-lg" placeholder="Pega tu token aquí..." value="{{ request.GET.token|default:'' }}" size="35">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-cute btn-lg">Rastrear</button>
+                </div>
+            {% if request.GET.token %}
+            <div class="col-auto">
+                <a href="{% url 'generar_pdf_token' token=request.GET.token %}" target="_blank" class="btn btn-primary btn-lg">
+                    Descargar PDF
+                </a>
+            </div>
+            {% endif %}
+            </form>
+        </div>
+
+        {% if pedido %}
+        <div class="card card-product p-5">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <div>
+                    <h4 class="fw-bold mb-0">Hola, {{ pedido.cliente_nombre }} 👋</h4>
+                    <p class="text-muted mb-0">Pedido #{{ pedido.id }}</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge rounded-pill bg-light text-dark border p-2">
+                        Pago: 
+                        {% if pedido.estado_pago == 'PAG' %}
+                            <span class="text-success fw-bold">✅ PAGADO</span>
+                        {% elif pedido.estado_pago == 'PAR' %}
+                            <span class="text-warning fw-bold">⚠️ PARCIAL</span>
+                        {% else %}
+                            <span class="text-danger fw-bold">❌ PENDIENTE</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="py-4 mb-4">
+                <div class="timeline-steps">
+                    <div class="step active">
+                        <div class="step-icon">📩</div>
+                        <p class="small fw-bold">Solicitado</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido != 'SOL' %}active{% endif %}">
+                        <div class="step-icon">✅</div>
+                        <p class="small fw-bold">Aprobado</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido == 'PRO' or pedido.estado_pedido == 'REA' or pedido.estado_pedido == 'ENT' or pedido.estado_pedido == 'FIN' %}active{% endif %}">
+                        <div class="step-icon">🎨</div>
+                        <p class="small fw-bold">En Proceso</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido == 'ENT' or pedido.estado_pedido == 'FIN' %}active{% endif %}">
+                        <div class="step-icon">🎁</div>
+                        <p class="small fw-bold">Entregado</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="text-muted">
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-primary">Detalles de la solicitud:</h6>
+                    <p>{{ pedido.descripcion_solicitud }}</p>
+                    
+                    {% if pedido.producto_referencia %}
+                    <p><strong>Producto Base:</strong> {{ pedido.producto_referencia.nombre }}</p>
+                    {% endif %}
+                    
+                    {% if pedido.fecha_entrega_deseada %}
+                    <p><strong>Fecha solicitada:</strong> {{ pedido.fecha_entrega_deseada }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-6 text-center">
+                    {% if pedido.imagen_referencia %}
+                        <h6 class="fw-bold text-primary">Tu imagen de referencia:</h6>
+                        <img src="{{ pedido.imagen_referencia.url }}" class="img-fluid rounded-3 border shadow-sm" style="max-height: 200px;">
+                    {% else %}
+                        <p class="text-muted fst-italic mt-4">No adjuntaste imagen de referencia.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

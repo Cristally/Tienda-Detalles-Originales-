@@ -1,0 +1,221 @@
+{% extends "api.html" %}
+
+{% block api %}
+<div id="chart-container" style="max-width:420px;margin:0 auto;text-align:center; display:none;">
+  <h5 id="chart-title"></h5>
+  <canvas id="reporte" width="360" height="360"></canvas>
+</div>
+<div style="max-width:720px;margin:1rem auto 0;">
+  <label for="filterType"><strong>Filtrar datos:</strong></label>
+  <select id="filterType" class="form-control" style="max-width:420px;margin-bottom:.5rem;">
+    <option value="">-- Selecciona filtro --</option>
+    <option value="estado_pedido">Filtrar por estado del pedido</option>
+    <option value="estado_pago">Filtrar por estado de pago</option>
+    <option value="rango_fechas">Filtrar por rango de fechas</option>
+    <option value="origen">Filtrar por Origen</option>
+  </select>
+
+  <div id="filter-controls"></div>
+  <div id="filterResult" style="margin-top:.5rem;white-space:pre-wrap;font-family:monospace;color:#333;"></div>
+</div>
+{% endblock api %}
+
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+
+
+  //Función para actualizar el grafico que se muestra segun el valor obtenido del dropdown button
+  function updateChart(newLabels, newValues, newColors, title){
+    const titleEl = document.getElementById('chart-title');
+    const chartContainer = document.getElementById('chart-container');
+
+    chartContainer.style.display = 'block';
+    titleEl.textContent = title || '';
+
+    if (!window.reportChart) {
+      window.reportChart = new Chart(document.getElementById('reporte'), {
+        type: 'doughnut',
+        data: {
+          labels: newLabels,
+          datasets: [{
+            data: newValues,
+            backgroundColor: newColors
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+      return;
+    }
+
+    window.reportChart.data.labels = newLabels;
+    window.reportChart.data.datasets[0].data = newValues;
+    window.reportChart.data.datasets[0].backgroundColor = newColors;
+    window.reportChart.update();
+  }
+
+  const filterType = document.getElementById('filterType');
+  const filterControls = document.getElementById('filter-controls');
+  const filterResult = document.getElementById('filterResult');
+
+  //Función para limpiar controles y los resultados obtenidos
+  function clearControls(){ filterControls.innerHTML = ''; filterResult.textContent = ''; }
+
+  //Función para mostrar la tabla bajo el grafico
+  function renderTable(columns, rows){
+    if(!columns || !rows) { filterResult.innerHTML=''; return; }
+    let html = '<table class="table table-sm"><thead><tr>' + columns.map(c=>`<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+    rows.forEach(r => {
+      html += '<tr>' + r.map(cell=>`<td>${cell}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table>';
+    filterResult.innerHTML = html;
+  }
+
+  //Función para hacer colores pastel y que se vea más agradable visualmente
+  function pastelColors(labels){
+    const total = (labels && labels.length) || 1;
+    return labels.map((_, i) => {
+      const hue = Math.round((i * 360 / total) ) % 360;
+      const saturation = 65;
+      const lightness = 82;
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    });
+  }
+
+
+  filterType.addEventListener('change', async function(){
+    const chartContainer = document.getElementById('chart-container');
+  chartContainer.style.display = 'block';
+    clearControls();
+    const v = this.value;
+    if (!v) return;
+
+    try{
+      const r = await fetch('/api/pedidos/filtrar/por-fecha/');
+      if(!r.ok){ filterResult.textContent = 'No se pudieron obtener pedidos ('+r.status+')'; return; }
+      const pedidos = await r.json();
+
+      //Para obtener el grafico y el reporte en base a estado_pedido
+      if (v === 'estado_pedido'){
+        const mapping = [['SOL','Solicitado'], ['APR','Aprobado'], ['EPR','En proceso'], ['REA','Realizado'], ['ENT','Entregado'], ['FIN','Finalizado'], ['CAN','Cancelado']];
+        const labels = mapping.map(m=>m[1]);
+        const codes = mapping.map(m=>m[0]);
+        const counts = codes.map(code => pedidos.filter(p=>p.estado_pedido===code).length);
+        const colors = ['#E0B5EA','#D9FFDD','#F7FFDC','#D9DBFF','#DCF7FF','#D0E7CF','#FFA6A6'];
+        updateChart(labels, counts, colors, 'Distribución por Estado del Pedido');
+        renderTable(['Estado','Cantidad'], codes.map((c,i)=>[labels[i], counts[i]]));
+      }
+
+      //Para obtener el grafico y el reporte en base a estado_pago
+      if (v === 'estado_pago'){
+        const mapping = [['PEN','Pendiente'], ['PAR','Parcial'], ['PAG','Pagado'], ['REM','Reembolsado']];
+        const labels = mapping.map(m=>m[1]);
+        const codes = mapping.map(m=>m[0]);
+        const counts = codes.map(code=>pedidos.filter(p=>p.estado_pago===code).length);
+        const colors = ['#FFC497','#FBFFBA','#ADFFA6','#FFA6A6'];
+        updateChart(labels, counts, colors, 'Distribución por Estado de Pago');
+        renderTable(['Estado de Pago','Cantidad'], codes.map((c,i)=>[labels[i], counts[i]]));
+      }
+
+      
+if (v === 'rango_fechas') {
+  const hoy = new Date().toISOString().split('T')[0];
+
+  const desde = document.createElement('input');
+  desde.type = 'date';
+  desde.className = 'form-control';
+  desde.style.maxWidth = '200px';
+  desde.max = hoy;
+
+  const hasta = document.createElement('input');
+  hasta.type = 'date';
+  hasta.className = 'form-control';
+  hasta.style.maxWidth = '200px';
+  hasta.max = hoy;
+
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-primary mt-2';
+  btn.textContent = 'Aplicar rango';
+
+  filterControls.appendChild(desde);
+  filterControls.appendChild(hasta);
+  filterControls.appendChild(btn);
+
+  desde.addEventListener('change', () => {
+    if (hasta.value && desde.value > hasta.value) {
+      desde.value = hasta.value;
+    }
+    hasta.min = desde.value;
+  });
+
+  hasta.addEventListener('change', () => {
+    if (desde.value && hasta.value < desde.value) {
+      hasta.value = desde.value;
+    }
+  });
+
+  btn.onclick = async () => {
+    const d = desde.value;
+    const h = hasta.value;
+
+    if (!d || !h) {
+      alert('Debe seleccionar ambas fechas');
+      return;
+    }
+
+    try {
+      const r2 = await fetch(`/api/pedidos/filtrar/por-fecha/?desde=${d}&hasta=${h}`);
+      if (!r2.ok) {
+        filterResult.textContent = 'No se obtuvieron resultados (' + r2.status + ')';
+        return;
+      }
+
+      const data = await r2.json();
+      const countsByDate = {};
+
+      data.forEach(p => {
+        const f = p.fecha_solicitada || 'Sin fecha';
+        countsByDate[f] = (countsByDate[f] || 0) + 1;
+      });
+
+      const labels = Object.keys(countsByDate).sort();
+      const values = labels.map(l => countsByDate[l]);
+      const colors = pastelColors(labels);
+
+      updateChart(labels, values, colors, `Pedidos por Fecha (${d} → ${h})`);
+      renderTable(['Fecha', 'Cantidad'], labels.map(l => [l, countsByDate[l]]));
+
+    } catch (e) {
+      filterResult.textContent = 'Error de red al consultar la API.';
+    }
+  };
+}
+
+
+      if (v === 'origen'){
+        const mapping = [['FAC','Facebook'], ['IG','Instagram'], ['WHA','WhatsApp'], ['PRE','Presencial'], ['WEB','Sitio Web'], ['OTR','Otro']];
+        const labels = mapping.map(m=>m[1]);
+        const codes = mapping.map(m=>m[0]);
+        const counts = codes.map(code=>pedidos.filter(p=>p.origen_pedido===code).length);
+        const colors = ['#AECFFE',' #FFD1DC','#AAF0D1','#E3E4FA','#FFFACD','#B0E0E6'];
+        updateChart(labels, counts, colors, 'Distribución por Origen');
+        renderTable(['Origen','Cantidad'], codes.map((c,i)=>[labels[i], counts[i]]));
+      }
+
+    }catch(e){ filterResult.textContent = 'Error al consultar pedidos.'; }
+    
+  });
+});
+</script>
+
+{% endblock scripts %}

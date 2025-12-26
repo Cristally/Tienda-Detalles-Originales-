@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h1 style="color: var(--accent);">Lista de Insumos</h1>
+</div>
+
+{% if insumos|length == 0 %}
+    <p>No hay insumos ingresados</p>
+{% else %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tipo de Insumo</th>
+                    <th>Nombre del Insumo</th>
+                    <th>Cantidad Disponible</th>
+                    <th>Marca del Insumo</th>
+                    <th>Color del Insumo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for insum in insumos %}
+                    <tr>
+                        <td>{{ insum.tipo_insumo }}</td>
+                        <td>{{ insum.nombre_insumo }}</td>
+                        <td>
+                            {% if insum.cantidad_disponible_insumo < 5 %}
+                                <span class="badge bg-danger">{{ insum.cantidad_disponible_insumo }}</span>
+                            {% else %}
+                                <span class="badge bg-primary">{{ insum.cantidad_disponible_insumo }}</span>
+                            {% endif %}
+                        <td>{{ insum.marca_insumo }}</td>
+                        <td style="background-color: {{ insum.color_insumo }};"></td>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}

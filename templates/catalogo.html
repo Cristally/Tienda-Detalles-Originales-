@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 style="color: var(--accent);">Nuestros Productos 🛍️</h1>
+    <p class="text-muted">Encuentra el regalo perfecto y personalízalo</p>
+</div>
+
+<div class="row mb-5 justify-content-center">
+    <div class="col-md-8">
+        <form method="get" class="d-flex gap-2 mb-3">
+            <input type="text" name="q" class="form-control rounded-pill" placeholder="🔍 Buscar producto..." value="{{ request.GET.q|default:'' }}">
+            <button type="submit" class="btn btn-cute">Buscar</button>
+        </form>
+        
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a href="{% url 'catalogo' %}" class="btn btn-sm btn-outline-secondary rounded-pill">Todo</a>
+            {% for cat in categoria %}
+                <a href="?categoria={{ cat.id }}" class="btn btn-sm btn-outline-secondary rounded-pill">{{ cat.nombre_categoria }}</a>
+            {% endfor %}
+            <a href="?destacado=1" class="btn btn-sm btn-warning rounded-pill text-white">⭐ Destacados</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for producto in productos %}
+    <div class="col-md-4 mb-4">
+        <div class="card card-product h-100 position-relative">
+            
+            {% if producto.producto_destacado %}
+            <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-3 rounded-pill">
+                ⭐ Destacado
+            </span>
+            {% endif %}
+
+            <div style="height: 250px; overflow: hidden; background: #f8f9fa;">
+                {% with producto.imagenes.all|first as imagen_principal %}
+                    {% if imagen_principal %}
+                        <img src="{{ imagen_principal.imagen.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ producto.nombre_producto }}">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center h-100 text-muted">Sin imagen 📷</div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="card-body text-center d-flex flex-column">
+                <h5 class="fw-bold text-dark">{{ producto.nombre_producto }}</h5>
+                <p class="small text-muted mb-2">{{ producto.categoria_producto.nombre_categoria }}</p>
+                
+                <h4 style="color: var(--primary); font-weight: bold;">
+                    ${{ producto.precio_base_producto }}
+                </h4>
+                
+                <p class="card-text small text-muted">
+                    {{ producto.descripcion_producto|truncatechars:50 }}
+                </p>
+                
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="{% url 'productos_detalles' producto.id %}" class="btn btn-outline-secondary w-50 rounded-pill d-flex align-items-center justify-content-center" style="font-size: 0.9rem;">
+                        Ver más 👀
+                    </a>
+                    
+                    <a href="{% url 'crear_pedido' %}?ref={{ producto.id }}" class="btn btn-cute w-50 d-flex align-items-center justify-content-center" style="font-size: 0.9rem;">
+                        ¡Lo quiero! ✨
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <p class="text-muted">No encontramos ese producto</p>
+        <a href="{% url 'catalogo' %}" class="btn btn-link">Ver todo</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-product p-4 p-md-5">
+            
+            {% if token %}
+                <div class="text-center">
+                    <h1 class="display-1">🎉</h1>
+                    <h2 style="color: var(--secondary); font-weight: bold;">¡Solicitud Enviada!</h2>
+                    <p class="lead">Tu código de seguimiento es:</p>
+                    <div class="bg-light p-3 rounded-3 mb-4 border border-2 border-warning">
+                        <h3 class="font-monospace mb-0 text-dark user-select-all">{{ token }}</h3>
+                    </div>
+                    <p class="small text-muted">Guárda tu codigo. Lo necesitarás para ver el estado de tu pedido.</p>
+                    <a href="{% url 'seguimiento' %}?token={{ token }}" class="btn btn-cute btn-lg">Ir a Seguimiento ➡️</a>
+                </div>
+
+            {% else %}
+                <h2 class="text-center mb-4" style="color: var(--accent);"><i class="bi bi-stars"></i>Personaliza tu Pedido<i class="bi bi-stars"></i></h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-person-circle"></i>&nbsp;&nbsp;&nbsp;Tu Nombre</label>
+                        {{ form.cliente_nombre }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold"><i class="bi bi-envelope"></i>&nbsp;&nbsp;&nbsp;Contacto (Email / Whatsapp / Instagram)</label>
+                        {{ form.cliente_contacto }}
+                    </div>
+
+                    {% if producto_preseleccionado %}
+                        <div class="mb-3 p-3 bg-light rounded-3 border">
+                            <label class="form-label fw-bold text-primary">
+                                <i class="bi bi-gift-fill"></i>&nbsp;&nbsp;&nbsp;Producto a Personalizar:
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control bg-white"
+                                value="{{ producto_preseleccionado.nombre_producto }}"
+                                disabled
+                                readonly
+                            >
+                            <input
+                                type="hidden"
+                                name="producto"
+                                value="{{ producto_preseleccionado.id }}"
+                            >
+                            <small class="text-muted">
+                                Seleccionado desde el catálogo
+                            </small>
+                        </div>
+                    {% else %}
+                        <div class="mb-3 alert alert-info">
+                            <i class="bi bi-info-circle"></i> Para crear un pedido, primero selecciona un producto desde el <a href="{% url 'catalogo' %}">catálogo para usarlo como referencia</a>.
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold"><i class="bi bi-calendar-heart-fill"></i>&nbsp;&nbsp;&nbsp;Fecha deseada </label>
+                            {{ form.fecha_solicitada }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold"><i class="bi bi-camera-fill"></i>&nbsp;&nbsp;&nbsp;Imágenes de referencia</label>
+                            <input type="file" name="imagenes" multiple class="form-control" accept="image/*">
+                            <small class="text-muted">Puedes subir hasta 5 imágenes de referencia.</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold"><i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;&nbsp;Cuentanos como quieres que sea (Colores, talla, texto, etc). Danos todos los detalles que consideres importantes:</label>
+                        {{ form.descripcion }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-cute btn-lg">Enviar Solicitud 💌</button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

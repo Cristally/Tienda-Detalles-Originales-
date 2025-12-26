@@ -1,0 +1,63 @@
+        :root {
+            --primary: #FFB7B2; /* Rosa Salmón */
+            --secondary: #B5EAD7; /* Menta */
+            --accent: #FF9AA2; /* Rosa más fuerte */
+            --bg-color: #FFF9FA; /* Fondo muy pálido */
+            --text-color: #666;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Navbar estilo burbuja */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(255, 183, 178, 0.2);
+            border-radius: 0 0 20px 20px;
+            padding: 15px;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--accent) !important;
+            font-size: 1.5rem;
+        }
+
+        /* Botones personalizados */
+        .btn-cute {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50px;
+            padding: 8px 20px;
+            border: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn-cute:hover {
+            background-color: var(--accent);
+            transform: scale(1.05);
+            color: white;
+        }
+
+        /* Tarjetas de productos */
+        .card-product {
+            border: none;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card-product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 183, 178, 0.3);
+        }
+
+        .navbar-nav .nav-link.btn:hover {
+            background-color: #FFB7B2; /* color de fondo al pasar el mouse */
+            color: white; /* color del texto al pasar el mouse */
+            border-color: #6c7d74ff; /* opcional: cambiar el borde también */
+            transition: 0.3s; /* suaviza la transición */
+        }

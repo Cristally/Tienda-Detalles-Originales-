@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'styles/seguimiento.css' %}">
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        
+        <h2 class="text-center mb-5" style="color: var(--primary);">🔍 Estado del Pedido</h2>
+
+        <div class="card p-4 mb-5 border-0 shadow-sm text-center">
+            <form id="track-form" method="get" class="row justify-content-center g-2">
+                <div class="col-auto">
+                    <input id="token-input" type="text" name="token" class="form-control form-control-lg" placeholder="Pega tu token aquí..." value="{{ request.GET.token|default:'' }}" size="35">
+                </div>
+                <div class="col-auto">
+                    <button id="track-btn" type="submit" class="btn btn-cute btn-lg">Rastrear</button>
+                </div>
+                <div class="col-auto" id="pdf-link-container" style="display: {% if request.GET.token %}block{% else %}none{% endif %};">
+                    {% if request.GET.token %}
+                    <a id="pdf-link" href="{% url 'generar_pdf_token' token=request.GET.token %}" target="_blank" class="btn btn-primary btn-lg">
+                        Descargar PDF
+                    </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <div id="edit-form-container" class="card p-3 mb-4" style="display:none; max-width:720px;">
+            <h5>Editar pedido</h5>
+            <form id="editPedidoForm">
+                <div class="mb-2">
+                    <label class="form-label">Estado del pedido</label>
+                    <select name="estado_pedido" class="form-control">
+                        <option value="">(sin cambios)</option>
+                        <option value="SOL">Solicitado</option>
+                        <option value="APR">Aprobado</option>
+                        <option value="EPR">En Proceso</option>
+                        <option value="ENT">Entregado</option>
+                        <option value="FIN">Finalizado</option>
+                        <option value="CAN">Cancelado</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Estado de pago</label>
+                    <select name="estado_pago" class="form-control">
+                        <option value="">(sin cambios)</option>
+                        <option value="PAG">Pagado</option>
+                        <option value="PAR">Parcial</option>
+                        <option value="PEN">Pendiente</option>
+                        <option value='REN'>Reembolsado</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Descripción</label>
+                    <textarea name="descripcion_solicitud" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button id="submit-edit" type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <button id="cancel-edit" type="button" class="btn btn-secondary">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="pedido-card-container">
+        {% if pedido %}
+        <div id="pedido-card" class="card card-product p-5">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <div>
+                    <h4 class="fw-bold mb-0">Hola, {{ pedido.cliente_nombre }} 👋</h4>
+                    <p class="text-muted mb-0">Pedido #{{ pedido.id }}</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge rounded-pill bg-light text-dark border p-2">
+                        Pago: 
+                        {% if pedido.estado_pago == 'PAG' %}
+                            <span class="text-success fw-bold">✅ PAGADO</span>
+                        {% elif pedido.estado_pago == 'PAR' %}
+                            <span class="text-warning fw-bold">⚠️ PARCIAL</span>
+                        {% else %}
+                            <span class="text-danger fw-bold">❌ PENDIENTE</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <div class="py-4 mb-4">
+                <div class="timeline-steps">
+                    <div class="step active">
+                        <div class="step-icon">📩</div>
+                        <p class="small fw-bold">Solicitado</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido != 'SOL' %}active{% endif %}">
+                        <div class="step-icon">✅</div>
+                        <p class="small fw-bold">Aprobado</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido == 'PRO' or pedido.estado_pedido == 'REA' or pedido.estado_pedido == 'ENT' or pedido.estado_pedido == 'FIN' %}active{% endif %}">
+                        <div class="step-icon">🎨</div>
+                        <p class="small fw-bold">En Proceso</p>
+                    </div>
+                    <div class="step {% if pedido.estado_pedido == 'ENT' or pedido.estado_pedido == 'FIN' %}active{% endif %}">
+                        <div class="step-icon">🎁</div>
+                        <p class="small fw-bold">Entregado</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="text-muted">
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-primary">Detalles de la solicitud:</h6>
+                    <p>{{ pedido.descripcion_solicitud }}</p>
+                    
+                    {% if pedido.producto_referencia %}
+                    <p><strong>Producto Base:</strong> {{ pedido.producto_referencia.nombre }}</p>
+                    {% endif %}
+                    
+                    {% if pedido.fecha_entrega_deseada %}
+                    <p><strong>Fecha solicitada:</strong> {{ pedido.fecha_entrega_deseada }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-6 text-center">
+                    {% if pedido.imagen_referencia %}
+                        <h6 class="fw-bold text-primary">Tu imagen de referencia:</h6>
+                        <img src="{{ pedido.imagen_referencia.url }}" class="img-fluid rounded-3 border shadow-sm" style="max-height: 200px;">
+                    {% else %}
+                        <p class="text-muted fst-italic mt-4">No adjuntaste imagen de referencia.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        </div>
+
+        <script>
+        let currentPedidoId = null;
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function renderPedido(data, token) {
+            const container = document.getElementById('pedido-card-container');
+            const pdfContainer = document.getElementById('pdf-link-container');
+            if (pdfContainer) {
+                pdfContainer.style.display = token ? 'block' : 'none';
+                const pdfLink = document.getElementById('pdf-link');
+                if (pdfLink && token) pdfLink.href = `/pedido/boleta/${token}/`;
+            }
+
+            if (!data) {
+                container.innerHTML = '<div class="card p-4">No se encontró ningún pedido con ese token.</div>';
+                return;
+            }
+
+            const productoNombre = data.producto_referencia && data.producto_referencia.nombre ? data.producto_referencia.nombre : '';
+            const imagenUrl = data.imagen_referencia && data.imagen_referencia.url ? data.imagen_referencia.url : null;
+
+            const pagoLabel = data.estado_pago === 'PAG' ? '<span class="text-success fw-bold">✅ PAGADO</span>' : (data.estado_pago === 'PAR' ? '<span class="text-warning fw-bold">⚠️ PARCIAL</span>' : '<span class="text-danger fw-bold">❌ PENDIENTE</span>');
+
+            const cardHtml = `
+            <div id="pedido-card" class="card card-product p-5">
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <div>
+                    <h4 class="fw-bold mb-0">Hola, ${data.cliente_nombre || ''} 👋</h4>
+                    <p class="text-muted mb-0">Pedido #${data.id}</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge rounded-pill bg-light text-dark border p-2">Pago: ${pagoLabel}</span>
+                </div>
+              </div>
+
+              <div class="py-4 mb-4">
+                <div class="timeline-steps">
+                    <div class="step ${data.estado_pedido === 'SOL' || !data.estado_pedido ? 'active' : ''}">
+                        <div class="step-icon">📩</div>
+                        <p class="small fw-bold">Solicitado</p>
+                    </div>
+                    <div class="step ${data.estado_pedido !== 'SOL' ? 'active' : ''}">
+                        <div class="step-icon">✅</div>
+                        <p class="small fw-bold">Aprobado</p>
+                    </div>
+                    <div class="step ${['PRO','REA','ENT','FIN'].includes(data.estado_pedido) ? 'active' : ''}">
+                        <div class="step-icon">🎨</div>
+                        <p class="small fw-bold">En Proceso</p>
+                    </div>
+                    <div class="step ${['ENT','FIN'].includes(data.estado_pedido) ? 'active' : ''}">
+                        <div class="step-icon">🎁</div>
+                        <p class="small fw-bold">Entregado</p>
+                    </div>
+                </div>
+              </div>
+
+              <hr class="text-muted">
+
+              <div class="row mt-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-primary">Detalles de la solicitud:</h6>
+                    <p>${data.descripcion_solicitud || ''}</p>
+                    ${productoNombre ? `<p><strong>Producto Base:</strong> ${productoNombre}</p>` : ''}
+                    ${data.fecha_entrega_deseada ? `<p><strong>Fecha solicitada:</strong> ${data.fecha_entrega_deseada}</p>` : ''}
+                    <div class="mt-3">
+                      <button id="edit-button" class="btn btn-outline-primary">Editar pedido</button>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    ${imagenUrl ? `<h6 class="fw-bold text-primary">Tu imagen de referencia:</h6><img src="${imagenUrl}" class="img-fluid rounded-3 border shadow-sm" style="max-height: 200px;">` : '<p class="text-muted fst-italic mt-4">No adjuntaste imagen de referencia.</p>'}
+                </div>
+              </div>
+            </div>`;
+
+            container.innerHTML = cardHtml;
+
+            const editBtn = document.getElementById('edit-button');
+            if (editBtn) {
+                editBtn.addEventListener('click', function () {
+                    editarPedido(data.id);
+                });
+            }
+        }
+
+        async function editarPedido(id) {
+            document.getElementById('edit-form-container').style.display = '';
+        }
+        document.getElementById('track-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const token = document.getElementById('token-input').value.trim();
+            if (!token) {
+                alert('Introduce un token válido.');
+                return;
+            }
+
+            try {
+                const resp = await fetch(`/api/pedidos/filtrar/${token}/`);
+                if (!resp.ok) {
+                    if (resp.status === 404) {
+                        const adminActionsHide = document.getElementById('admin-actions');
+                        if (adminActionsHide) adminActionsHide.style.display = 'none';
+                        const editHide = document.getElementById('edit-form-container');
+                        if (editHide) editHide.style.display = 'none';
+                        renderPedido(null, token);
+                        return;
+                    }
+                    const txt = await resp.text();
+                    alert('Error al obtener pedido: ' + resp.status + ' ' + txt);
+                    return;
+                }
+                const data = await resp.json();
+                const pedidoData = Array.isArray(data) && data.length > 0 ? data[0] : data;
+                
+                currentPedidoId = pedidoData.id;
+                
+                renderPedido(pedidoData, token);
+
+                const editForm = document.getElementById('editPedidoForm');
+                if (editForm) {
+                    editForm.elements['estado_pedido'].value = pedidoData.estado_pedido || '';
+                    editForm.elements['estado_pago'].value = pedidoData.estado_pago || '';
+                    editForm.elements['descripcion_solicitud'].value = pedidoData.descripcion_solicitud || '';
+                    document.getElementById('edit-form-container').style.display = 'none';
+
+                    const cancelBtn = document.getElementById('cancel-edit');
+                    if (cancelBtn) cancelBtn.onclick = function(){ document.getElementById('edit-form-container').style.display = 'none'; };
+                    editForm.onsubmit = async function(ev){
+                        ev.preventDefault();
+                        if (!currentPedidoId) { alert('No hay pedido cargado.'); return; }
+                        const formData = new FormData(this);
+                        const payload = {};
+                        for (const [k,v] of formData.entries()) {
+                            if (v !== '') payload[k] = v;
+                        }
+                        if (Object.keys(payload).length === 0) { alert('No hay cambios para guardar.'); return; }
+                        const ok = confirm('¿Confirmas que deseas aplicar los cambios al pedido #' + currentPedidoId + '?');
+                        if (!ok) return;
+                        try{
+                            const r = await fetch(`/api/pedidos/${currentPedidoId}/`, {
+                                method: 'PATCH',
+                                headers: {'Content-Type':'application/json','X-CSRFToken': getCookie('csrftoken') || ''},
+                                body: JSON.stringify(payload)
+                            });
+                            if (!r.ok) { const t = await r.text(); alert('Error al actualizar: ' + r.status + ' ' + t); return; }
+                            const updated = await r.json();
+                            alert('Pedido actualizado correctamente.');
+                            currentPedidoId = updated.id;
+                            renderPedido(updated, token);
+                            document.getElementById('edit-form-container').style.display = 'none';
+                        } catch(err){ alert('Error de red al actualizar.'); console.error(err); }
+                    };
+                }
+
+            } catch (err) {
+                alert('Error de red al buscar el pedido.');
+                console.error(err);
+            }
+        });
+        </script>
+    </div>
+</div>
+{% endblock %}
